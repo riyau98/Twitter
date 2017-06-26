@@ -1,10 +1,14 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -23,6 +27,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    public static final int NEW_TWEET_REQUEST_CODE = 20;
 
 
 
@@ -48,6 +53,13 @@ public class TimelineActivity extends AppCompatActivity {
         //populate the array list
         populateTimeline();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        return true;
     }
 
     private void populateTimeline(){
@@ -95,6 +107,13 @@ public class TimelineActivity extends AppCompatActivity {
                  throwable.printStackTrace();
              }
          });
+    }
+
+    public void composeNewTweet(MenuItem mi){
+        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+        //TODO start HERE
+        i.putExtra("Twitter Client", (Parcelable) client);
+        startActivityForResult(i, NEW_TWEET_REQUEST_CODE);
     }
 
 }
