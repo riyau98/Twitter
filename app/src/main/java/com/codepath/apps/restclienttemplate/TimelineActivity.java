@@ -117,11 +117,12 @@ public class TimelineActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RESULT_OK && resultCode == NEW_TWEET_REQUEST_CODE) {
+        if (requestCode == NEW_TWEET_REQUEST_CODE && resultCode == RESULT_OK) {
             Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("newTweet"));
             tweets.add(0, newTweet);
             tweetAdapter.notifyItemInserted(0);
             rvTweets.scrollToPosition(0);
         }
+
     }
 }

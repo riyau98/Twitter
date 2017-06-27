@@ -10,19 +10,18 @@
         android:id="@+id/etNewTweet"
         android:layout_width="384dp"
         android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="15dp"
         android:background="@android:color/transparent"
         android:ems="10"
-        android:hint="What's happening?"
-        android:inputType="text"
-        android:selectAllOnFocus="false"
-        android:singleLine="false"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="5dp"
         android:gravity="top"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:hint="What's happening?"
+        android:inputType="textMultiLine"
+        android:selectAllOnFocus="false"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="5dp" />
 
     <Button
         android:id="@+id/btTweet"
