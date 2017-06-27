@@ -3,6 +3,8 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -28,6 +30,7 @@ public class ComposeActivity extends AppCompatActivity {
     TextView tvScreenNameCompose;
     ImageView ivComposePic;
     User currentUser;
+    TextView tvCharsRemaining;
 
 
     @Override
@@ -39,9 +42,25 @@ public class ComposeActivity extends AppCompatActivity {
         tvNameCompose = (TextView) findViewById(R.id.tvNameCompose);
         tvScreenNameCompose = (TextView) findViewById(R.id.tvScreenNameCompose);
         ivComposePic = (ImageView) findViewById(R.id.ivComposePic);
+        tvCharsRemaining = (TextView) findViewById(R.id.tvCharsRemaining);
+        //character count
+        etNewTweet.addTextChangedListener(mTextEditorWatcher);
+        //set the user's name, text, and pro pic on compose page
         renderInformation();
 
     }
+    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //This sets a textview to the current length
+            tvCharsRemaining.setText(String.valueOf(140 - s.length()) + " characters remaining");
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
+    };
 
     public void renderInformation(){
         client.verifyCredentials(new JsonHttpResponseHandler(){

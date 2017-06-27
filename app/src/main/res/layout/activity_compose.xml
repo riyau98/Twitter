@@ -29,42 +29,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TWEET"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
         android:textColor="@color/white"
         android:onClick="onPostTweet"
-        android:layout_marginRight="15dp"
-        android:background="@color/twitterDarkBlue"/>
+        android:background="@color/twitterDarkBlue"
+        android:layout_above="@+id/tvCharsRemaining"
+        android:layout_alignEnd="@+id/tvCharsRemaining" />
 
     <ImageView
         android:id="@+id/ivComposePic"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_alignEnd="@+id/etNewTweet"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="15dp"
-        app:srcCompat="@drawable/loading_spinner" />
+        app:srcCompat="@drawable/loading_spinner"
+        android:layout_above="@+id/etNewTweet"
+        android:layout_alignStart="@+id/etNewTweet"
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:id="@+id/tvNameCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ivComposePic"
-        android:layout_toStartOf="@+id/ivComposePic"
-        android:layout_marginRight="5dp"
         android:textColor="@color/light_grey"
-        android:text="TextView" />
+        android:text="Name"
+        android:layout_alignTop="@+id/ivComposePic"
+        android:layout_toEndOf="@+id/ivComposePic"
+        android:layout_marginStart="13dp" />
 
     <TextView
         android:id="@+id/tvScreenNameCompose"
         android:layout_width="wrap_content"
-        android:layout_marginRight="5dp"
         android:layout_height="wrap_content"
         android:textColor="@color/light_grey"
-        android:layout_marginTop="5dp"
+        android:text="Screen Name"
         android:layout_below="@+id/tvNameCompose"
-        android:layout_toStartOf="@+id/ivComposePic"
-        android:text="TextView" />
+        android:layout_alignStart="@+id/tvNameCompose" />
+
+    <TextView
+        android:id="@+id/tvCharsRemaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="140 characters remaining"
+        android:layout_above="@+id/etNewTweet"
+        android:layout_alignEnd="@+id/etNewTweet" />
 </RelativeLayout>
