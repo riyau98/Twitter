@@ -2,7 +2,6 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +15,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -110,10 +110,18 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void composeNewTweet(MenuItem mi){
+        Log.i("composeNewTweet", "here");
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
         //TODO start HERE
-        i.putExtra("Twitter Client", (Parcelable) client);
         startActivityForResult(i, NEW_TWEET_REQUEST_CODE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("newTweet"));
+        tweets.add(0, newTweet);
+        tweetAdapter.notifyItemInserted(0);
+        rvTweets.scrollToPosition(0);
+    }
 }
