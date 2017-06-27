@@ -26,8 +26,21 @@ public class User {
         user.profileImageUrl=object.getString("profile_image_url");
 
         return user;
-
-
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
 }

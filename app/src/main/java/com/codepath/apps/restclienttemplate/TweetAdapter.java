@@ -57,7 +57,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         int radius = 8; // corner radius, higher value = more rounded
         int margin = 3; // crop margin, set to 0 for corners with no crop
         Glide.with(context)
-                .load(currentTweet .user.profileImageUrl)
+                .load(currentTweet.user.profileImageUrl)
                 .bitmapTransform(new RoundedCornersTransformation(context, radius, margin))
                 .into(holder.ivProfileImage);
         holder.tvScreenName.setText(String.format("@%s", currentTweet.user.screenName));
@@ -84,7 +84,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             //preform find view by id lookup
             ivProfileImage = (ImageView) itemView.findViewById(R.id. ivProfileImage);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
-            tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
+            tvUsername = (TextView) itemView.findViewById(R.id.tvNameCompose);
             tvScreenName = (TextView) itemView.findViewById(R.id.tvScreenName);
             tvRelativeTimestamp = (TextView) itemView.findViewById(R.id.tvRelativeTimestamp);
 

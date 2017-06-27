@@ -112,16 +112,16 @@ public class TimelineActivity extends AppCompatActivity {
     public void composeNewTweet(MenuItem mi){
         Log.i("composeNewTweet", "here");
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-        //TODO start HERE
         startActivityForResult(i, NEW_TWEET_REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("newTweet"));
-        tweets.add(0, newTweet);
-        tweetAdapter.notifyItemInserted(0);
-        rvTweets.scrollToPosition(0);
+        if (requestCode == RESULT_OK && resultCode == NEW_TWEET_REQUEST_CODE) {
+            Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("newTweet"));
+            tweets.add(0, newTweet);
+            tweetAdapter.notifyItemInserted(0);
+            rvTweets.scrollToPosition(0);
+        }
     }
 }

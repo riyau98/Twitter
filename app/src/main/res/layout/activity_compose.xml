@@ -10,9 +10,8 @@
         android:id="@+id/etNewTweet"
         android:layout_width="384dp"
         android:layout_height="300dp"
-        android:layout_marginBottom="74dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="15dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="What's happening?"
@@ -21,9 +20,9 @@
         android:singleLine="false"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="5dp"
-        android:layout_above="@+id/btTweet"
-        android:layout_alignEnd="@+id/btTweet"
-        android:gravity="top" />
+        android:gravity="top"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/btTweet"
@@ -32,8 +31,40 @@
         android:text="TWEET"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/white"
         android:onClick="onPostTweet"
+        android:layout_marginRight="15dp"
         android:background="@color/twitterDarkBlue"/>
+
+    <ImageView
+        android:id="@+id/ivComposePic"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignEnd="@+id/etNewTweet"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@drawable/loading_spinner" />
+
+    <TextView
+        android:id="@+id/tvNameCompose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivComposePic"
+        android:layout_toStartOf="@+id/ivComposePic"
+        android:layout_marginRight="5dp"
+        android:textColor="@color/light_grey"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tvScreenNameCompose"
+        android:layout_width="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/light_grey"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/tvNameCompose"
+        android:layout_toStartOf="@+id/ivComposePic"
+        android:text="TextView" />
 </RelativeLayout>
