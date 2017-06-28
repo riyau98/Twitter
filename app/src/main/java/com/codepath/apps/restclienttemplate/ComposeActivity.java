@@ -110,7 +110,6 @@ public class ComposeActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("onFailure", errorResponse.toString());
             }
-
         });
    }
 }
