@@ -3,9 +3,11 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,10 +29,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
     private List<Tweet> mTweets;
     Context context;
+    TimelineActivity currentActivity;
     //pass the tweets array into the constructor
 
-    public TweetAdapter(List<Tweet> tweets){
+    public TweetAdapter(List<Tweet> tweets, TimelineActivity currentActivity){
         mTweets = tweets;
+        this.currentActivity = currentActivity;
     }
 
     //for each row, inflate layout and pass into viewholder class
@@ -49,7 +53,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //get the data according to position
-        Tweet currentTweet=mTweets.get(position);
+        final Tweet currentTweet=mTweets.get(position);
         //populate the views according to the data from this specific tweet
         holder.tvUsername.setText(currentTweet.user.name);
         holder.tvBody.setText(currentTweet.body);
@@ -63,6 +67,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         holder.tvScreenName.setText(String.format("@%s", currentTweet.user.screenName));
         String relativeTimeAgo=getRelativeTimeAgo(currentTweet.createdAt);
         holder.tvRelativeTimestamp.setText(relativeTimeAgo);
+        holder.ibReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentActivity.openFragment(currentTweet);
+            }
+        });
 
     }
 
@@ -78,6 +88,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public TextView tvUsername;
         public TextView tvScreenName;
         public TextView tvRelativeTimestamp;
+        public ImageButton ibReply;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -87,7 +98,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             tvUsername = (TextView) itemView.findViewById(R.id.tvNameCompose);
             tvScreenName = (TextView) itemView.findViewById(R.id.tvScreenName);
             tvRelativeTimestamp = (TextView) itemView.findViewById(R.id.tvRelativeTimestamp);
-
+            ibReply = (ImageButton) itemView.findViewById(R.id.ibReply);
         }
     }
 
@@ -120,4 +131,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         mTweets.addAll(list);
         notifyDataSetChanged();
     }
+
+
+
+
 }

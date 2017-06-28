@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,7 +49,7 @@ public class TimelineActivity extends AppCompatActivity {
         //init the arraylist (data source)
         tweets = new ArrayList<>();
         //construct adapter from data source
-        tweetAdapter = new TweetAdapter(tweets);
+        tweetAdapter = new TweetAdapter(tweets, this);
         //set up the recycler view (layout manager, use adapter)
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         rvTweets.setAdapter(tweetAdapter);
@@ -115,6 +116,12 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
+    public void openFragment(Tweet t) {
+        FragmentManager fm = getSupportFragmentManager();
+        ReplyTweetFragment editNameDialogFragment = ReplyTweetFragment.newInstance();
+        editNameDialogFragment.show(fm, "fragment_edit_name");
+    }
+
     private void populateTimeline(){
          client.getHomeTimeline(new JsonHttpResponseHandler(){
              @Override
@@ -177,4 +184,9 @@ public class TimelineActivity extends AppCompatActivity {
             rvTweets.scrollToPosition(0);
         }
     }
+
+
+
 }
+
+

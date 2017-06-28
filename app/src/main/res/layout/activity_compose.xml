@@ -7,7 +7,7 @@
     tools:context="com.codepath.apps.restclienttemplate.ComposeActivity">
 
     <EditText
-        android:id="@+id/etNewTweet"
+        android:id="@+id/etReplyTweet"
         android:layout_width="384dp"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
@@ -39,8 +39,8 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         app:srcCompat="@drawable/loading_spinner"
-        android:layout_above="@+id/etNewTweet"
-        android:layout_alignStart="@+id/etNewTweet"
+        android:layout_above="@+id/etReplyTweet"
+        android:layout_alignStart="@+id/etReplyTweet"
         android:layout_marginBottom="10dp" />
 
     <TextView
@@ -67,6 +67,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="140 characters remaining"
-        android:layout_above="@+id/etNewTweet"
-        android:layout_alignEnd="@+id/etNewTweet" />
+        android:layout_above="@+id/etReplyTweet"
+        android:layout_alignEnd="@+id/etReplyTweet" />
 </RelativeLayout>
