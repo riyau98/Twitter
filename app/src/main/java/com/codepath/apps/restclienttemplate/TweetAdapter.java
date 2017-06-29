@@ -70,6 +70,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("fragment", "clicked to open fragment");
                 currentActivity.openFragment(currentTweet);
             }
         });

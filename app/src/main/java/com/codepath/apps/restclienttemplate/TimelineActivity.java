@@ -23,7 +23,8 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity {
+
+public class TimelineActivity extends AppCompatActivity implements ReplyTweetFragment.OnItemSelectedListener {
 
     private TwitterClient client;
     TweetAdapter tweetAdapter;
@@ -31,7 +32,7 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView rvTweets;
     SwipeRefreshLayout swipeContainer;
     public static final int NEW_TWEET_REQUEST_CODE = 20;
-
+    private ReplyTweetFragment replyTweetFragment;
 
 
     //steps to create a scrolling thing:
@@ -71,6 +72,8 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+
     }
 
     public void fetchTimelineAsync() {
@@ -116,10 +119,10 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
-    public void openFragment(Tweet t) {
+    public void openFragment(Tweet tweet) {
         FragmentManager fm = getSupportFragmentManager();
-        ReplyTweetFragment editNameDialogFragment = ReplyTweetFragment.newInstance();
-        editNameDialogFragment.show(fm, "fragment_edit_name");
+        replyTweetFragment = ReplyTweetFragment.newInstance(tweet);
+        replyTweetFragment.show(fm, "fragment_edit_name");
     }
 
     private void populateTimeline(){
@@ -179,10 +182,20 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == NEW_TWEET_REQUEST_CODE && resultCode == RESULT_OK) {
             Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("newTweet"));
-            tweets.add(0, newTweet);
-            tweetAdapter.notifyItemInserted(0);
-            rvTweets.scrollToPosition(0);
+            addNewTweet(newTweet);
         }
+    }
+    @Override
+    public void repliedToTweet(Tweet newTweet) {
+        if (replyTweetFragment != null) {
+            addNewTweet(newTweet);
+        }
+    }
+
+    public void addNewTweet(Tweet newTweet){
+        tweets.add(0, newTweet);
+        tweetAdapter.notifyItemInserted(0);
+        rvTweets.scrollToPosition(0);
     }
 
 
