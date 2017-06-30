@@ -73,6 +73,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                 .load(currentTweet.user.profileImageUrl)
                 .bitmapTransform(new RoundedCornersTransformation(context, radius, margin))
                 .into(holder.ivProfileImage);
+        if (currentTweet.mediaUrl!=null){
+            Glide.with(context)
+                    .load(currentTweet.mediaUrl)
+                    .bitmapTransform(new RoundedCornersTransformation(context, radius, margin))
+                    .into(holder.ivMedia);
+        }
         holder.tvScreenName.setText(String.format("@%s", currentTweet.user.screenName));
         String relativeTimeAgo=getRelativeTimeAgo(currentTweet.createdAt);
         holder.tvRelativeTimestamp.setText(relativeTimeAgo);
@@ -240,6 +246,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public ImageButton ibRetweet;
         public TextView tvNumFavorites;
         public TextView tvNumRetweets;
+        public ImageView ivMedia;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -254,6 +261,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             ibRetweet = (ImageButton) itemView.findViewById(R.id.ibRetweet);
             tvNumFavorites = (TextView) itemView.findViewById(R.id.tvNumFavorites);
             tvNumRetweets = (TextView) itemView.findViewById(R.id.tvNumRetweets);
+            ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
             //todo finish the details page
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override

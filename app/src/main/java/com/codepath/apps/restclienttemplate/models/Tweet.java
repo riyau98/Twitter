@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.models;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
@@ -21,6 +22,7 @@ public class Tweet {
     public boolean retweeted;
     public Integer numFavorites;
     public Integer numRetweets;
+    public String mediaUrl;
 
     //deserialize the JSON
     public static Tweet fromJSON(JSONObject object) throws JSONException{
@@ -35,6 +37,13 @@ public class Tweet {
         tweet.retweeted = object.getBoolean("retweeted");
         tweet.numFavorites = object.getInt("favorite_count");
         tweet.numRetweets = object.getInt("retweet_count");
+        JSONArray media = object.getJSONObject("entities").getJSONArray("media");
+        if (media.length() == 0){
+            tweet.mediaUrl = null;
+        }
+        else {
+            tweet.mediaUrl = media.getJSONObject(0).getString("media_url");
+        }
         return tweet;
     }
 

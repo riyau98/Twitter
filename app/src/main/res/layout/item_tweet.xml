@@ -74,6 +74,7 @@
         android:id="@+id/ibRetweet"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_below="@+id/ivMedia"
         android:layout_alignTop="@+id/ibReply"
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
@@ -113,9 +114,17 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/ibRetweet"
         android:layout_toEndOf="@+id/ibRetweet"
+        android:layout_below="@+id/ivMedia"
+        android:layout_marginTop="10dp"
         android:text="TextView" />
 
-
+    <ImageView
+        android:id="@+id/ivMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivProfileImage"
+        android:layout_toEndOf="@+id/tvScreenName"
+        app:srcCompat="@color/black" />
 
 
 </RelativeLayout>
