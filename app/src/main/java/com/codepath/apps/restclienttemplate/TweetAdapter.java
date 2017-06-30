@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -13,12 +14,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
@@ -30,11 +36,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     private List<Tweet> mTweets;
     Context context;
     TimelineActivity currentActivity;
+    TwitterClient client;
+
     //pass the tweets array into the constructor
 
     public TweetAdapter(List<Tweet> tweets, TimelineActivity currentActivity){
         mTweets = tweets;
         this.currentActivity = currentActivity;
+        client = TwitterApp.getRestClient();
     }
 
     //for each row, inflate layout and pass into viewholder class
@@ -51,7 +60,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
     //bind the values based on position
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         //get the data according to position
         final Tweet currentTweet=mTweets.get(position);
         //populate the views according to the data from this specific tweet
@@ -67,6 +76,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         holder.tvScreenName.setText(String.format("@%s", currentTweet.user.screenName));
         String relativeTimeAgo=getRelativeTimeAgo(currentTweet.createdAt);
         holder.tvRelativeTimestamp.setText(relativeTimeAgo);
+        holder.tvNumFavorites.setText(currentTweet.numFavorites.toString());
+        holder.tvNumRetweets.setText(currentTweet.numRetweets.toString());
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,9 +85,144 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                 currentActivity.openFragment(currentTweet);
             }
         });
+        if (currentTweet.favorited){
+            holder.ibFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_heart));
+            holder.ibFavorite.setColorFilter(ContextCompat.getColor(context,R.color.inline_action_like));
+        }
 
+        holder.ibRetweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!currentTweet.retweeted) {
+                    client.retweet(currentTweet, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                Tweet updatedTweet = Tweet.fromJSON(response);
+                                mTweets.set(position, updatedTweet);
+                                holder.ibRetweet.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_retweet));
+                                holder.ibRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like));
+                                holder.tvNumRetweets.setText(String.valueOf(updatedTweet.numRetweets));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.e("favorite", errorResponse.toString());
+                        }
+                    });
+                }
+
+                else {
+                    client.unRetweet(currentTweet, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                Tweet updatedTweet = Tweet.fromJSON(response);
+                                mTweets.set(position, updatedTweet);
+                                holder.ibRetweet.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_retweet_stroke));
+                                holder.ibRetweet.setColorFilter(ContextCompat.getColor(context, R.color.black));
+                                holder.tvNumRetweets.setText(String.valueOf(updatedTweet.numRetweets));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.e("favorite", errorResponse.toString());
+                        }
+                    });
+
+
+                }
+
+
+
+            }
+        });
+
+        holder.ibFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!currentTweet.favorited) {
+                    client.favoriteTweet(currentTweet, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                Tweet updatedTweet = Tweet.fromJSON(response);
+                                mTweets.set(position, updatedTweet);
+                                holder.ibFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_heart));
+                                holder.ibFavorite.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like));
+                                holder.tvNumFavorites.setText(String.valueOf(updatedTweet.numFavorites));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.e("favorite", errorResponse.toString());
+                        }
+                    });
+                }
+
+                else {
+                    client.unfavoriteTweet(currentTweet, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                Tweet updatedTweet = Tweet.fromJSON(response);
+                                mTweets.set(position, updatedTweet);
+                                holder.ibFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_heart_stroke));
+                                holder.ibFavorite.setColorFilter(ContextCompat.getColor(context, R.color.black));
+                                holder.tvNumFavorites.setText(String.valueOf(updatedTweet.numFavorites));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.e("favorite", errorResponse.toString());
+                        }
+                    });
+
+
+                }
+
+
+
+            }
+        });
     }
 
+
+//    public View.OnClickListener onRetweetClick (final ViewHolder holder){
+//        View.OnClickListener retweetClick = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                client.retweet(currentTweet, new JsonHttpResponseHandler(){
+//                    @Override
+//                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                        try {
+//                            holder.tvNumRetweets.setText(String.valueOf(Tweet.fromJSON(response).numRetweets));
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    @Override
+//                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                        Log.e("fail retweet", errorResponse.toString());
+//                    }
+//                });
+//            }
+//        };
+//        return retweetClick;
+//
+//    }
     @Override
     public int getItemCount() {
         return mTweets.size();
@@ -90,6 +236,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public TextView tvScreenName;
         public TextView tvRelativeTimestamp;
         public ImageButton ibReply;
+        public ImageButton ibFavorite;
+        public ImageButton ibRetweet;
+        public TextView tvNumFavorites;
+        public TextView tvNumRetweets;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -100,6 +250,20 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             tvScreenName = (TextView) itemView.findViewById(R.id.tvScreenName);
             tvRelativeTimestamp = (TextView) itemView.findViewById(R.id.tvRelativeTimestamp);
             ibReply = (ImageButton) itemView.findViewById(R.id.ibReply);
+            ibFavorite = (ImageButton) itemView.findViewById(R.id.ibFavorite);
+            ibRetweet = (ImageButton) itemView.findViewById(R.id.ibRetweet);
+            tvNumFavorites = (TextView) itemView.findViewById(R.id.tvNumFavorites);
+            tvNumRetweets = (TextView) itemView.findViewById(R.id.tvNumRetweets);
+            //todo finish the details page
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //on click, go to deatils page
+//                    //create intent
+//                    //in intent, load the tweet
+//                    //start activity (not for result)
+//                }
+//            });
         }
     }
 
@@ -133,6 +297,49 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         notifyDataSetChanged();
     }
 
+    public View.OnClickListener onFavoriteClick(final ViewHolder holder,final Tweet currentTweet) {
+        View.OnClickListener favoriteListener = new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                    client.favoriteTweet(currentTweet, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            //                                currentTweet = Tweet.fromJSON(response);
+                            holder.ibFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_heart));
+                            holder.ibFavorite.setColorFilter(ContextCompat.getColor(context,R.color.inline_action_like));
+                            holder.tvNumFavorites.setText(String.valueOf(currentTweet.numFavorites + 1));
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.e("favorite", errorResponse.toString());
+                        }
+                    });
+
+
+//                else {
+//                    client.unfavoriteTweet(currentTweet, new JsonHttpResponseHandler() {
+//                        @Override
+//                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                            try {
+//                                currentTweet = Tweet.fromJSON(response);
+//                                holder.ibFavorite.setBackgroundColor(Color.TRANSPARENT);
+//                                holder.tvNumFavorites.setText(String.valueOf(currentTweet.numFavorites));
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                            Log.e("favorite", errorResponse.toString());
+//                        }
+//                    });
+//                }
+            }
+        };
+        return favoriteListener;
+    }
 
 
 

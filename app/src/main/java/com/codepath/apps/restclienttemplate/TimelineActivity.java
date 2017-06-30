@@ -131,6 +131,7 @@ public class TimelineActivity extends AppCompatActivity implements ReplyTweetFra
              public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                  //Log.d("TwitterClient", response.toString());
                  //iterate through the response array
+                 Log.i("populateTimeline", response.toString());
                  for (int i=0; i<response.length(); i++) {
                      //for each object, deserialize the JSON
                      Tweet currTweet = null;
@@ -149,24 +150,24 @@ public class TimelineActivity extends AppCompatActivity implements ReplyTweetFra
 
              @Override
              public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                 Log.d("TwitterClient", response.toString());
+                 Log.i("TwitterClient", response.toString());
              }
 
              @Override
              public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                 Log.d("TwitterClient", responseString);
+                 Log.i("TwitterClient", responseString);
                  throwable.printStackTrace();
              }
 
              @Override
              public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                 Log.d("TwitterClient", errorResponse.toString());
+                 Log.i("TwitterClient", errorResponse.toString());
                  throwable.printStackTrace();
              }
 
              @Override
              public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                 Log.d("TwitterClient", errorResponse.toString());
+                 Log.i("TwitterClient", errorResponse.toString());
                  throwable.printStackTrace();
              }
          });

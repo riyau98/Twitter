@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
@@ -70,10 +71,32 @@ public class TwitterClient extends OAuthBaseClient {
 		params.put("status", message);
 		params.put("in_reply_to_status_id", uid);
 		client.post(apiUrl, params, handler);
-
 	}
 
+	public void favoriteTweet(Tweet tweet, AsyncHttpResponseHandler handler){
+		//todo unlike tweet
+		String apiUrl=getApiUrl("favorites/create.json");
+		RequestParams params = new RequestParams();
+		params.put("id", tweet.uid);
+		client.post(apiUrl, params, handler);
+	}
 
+	public void unfavoriteTweet(Tweet tweet, AsyncHttpResponseHandler handler){
+		String apiUrl=getApiUrl("favorites/destroy.json");
+		RequestParams params = new RequestParams();
+		params.put("id", tweet.uid);
+		client.post(apiUrl, params, handler);
+	}
+
+	public void retweet(Tweet tweet, AsyncHttpResponseHandler handler){
+		String apiUrl=getApiUrl("statuses/retweet/" + tweet.uid + ".json");
+		client.post(apiUrl, handler);
+	}
+
+	public void unRetweet(Tweet tweet, AsyncHttpResponseHandler handler){
+		String apiUrl=getApiUrl("statuses/unretweet/" + tweet.uid + ".json");
+		client.post(apiUrl, handler);
+	}
 
 
 
