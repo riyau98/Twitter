@@ -23,6 +23,8 @@ public class Tweet {
     public Integer numFavorites;
     public Integer numRetweets;
     public String mediaUrl;
+    public Integer mediaWidth;
+    public Integer mediaHeight;
 
     //deserialize the JSON
     public static Tweet fromJSON(JSONObject object) throws JSONException{
@@ -37,15 +39,17 @@ public class Tweet {
         tweet.retweeted = object.getBoolean("retweeted");
         tweet.numFavorites = object.getInt("favorite_count");
         tweet.numRetweets = object.getInt("retweet_count");
-        JSONArray media = object.getJSONObject("entities").getJSONArray("media");
-        if (media.length() == 0){
-            tweet.mediaUrl = null;
+        if (object.has("entities") && object.getJSONObject("entities").has("media")) {
+            JSONArray media = object.getJSONObject("entities").getJSONArray("media");
+            JSONObject pic =media.getJSONObject(0).getJSONObject("sizes").getJSONObject("medium");
+            tweet.mediaWidth = pic.getInt("w");
+            tweet.mediaHeight = pic.getInt("h");
+            tweet.mediaUrl = media.getJSONObject(0).getString("media_url");
         }
         else {
-            tweet.mediaUrl = media.getJSONObject(0).getString("media_url");
+            tweet.mediaUrl = null;
         }
         return tweet;
     }
-
 
 }

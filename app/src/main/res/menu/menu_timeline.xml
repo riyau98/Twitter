@@ -3,10 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/miCompose"
-        android:icon="@drawable/compose_icon_blue"
-        app:showAsAction="ifRoom"
+    android:id="@+id/miCompose"
+    android:icon="@drawable/vector_compose_fab"
+    android:onClick="composeNewTweet"
+    android:title="Compose"
+    app:showAsAction="always" />
+    <item
+        android:id="@+id/twitter_logo"
+        android:icon="@drawable/twitter_logo"
         android:title="Compose"
-        android:onClick="composeNewTweet"/>
+        app:showAsAction="always" />
 
 </menu>

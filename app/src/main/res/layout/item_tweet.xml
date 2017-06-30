@@ -2,30 +2,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginLeft="5dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginRight="5dp"
-    app:layout_goneMarginBottom="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    app:layout_goneMarginBottom="5dp"
     tools:context="com.codepath.apps.restclienttemplate.TimelineActivity">
 
     <ImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:srcCompat="@android:color/holo_green_light"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        app:srcCompat="@android:color/holo_green_light" />
 
     <TextView
         android:id="@+id/tvNameCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvBody"
         android:text="TextView"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_alignStart="@+id/tvBody" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvBody"
@@ -33,9 +33,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvNameCompose"
         android:layout_marginLeft="5dp"
+        android:autoLink="all"
+        android:linksClickable="true"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:text="TextView"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tvScreenName"
@@ -45,7 +47,7 @@
         android:layout_marginLeft="3dp"
         android:layout_toEndOf="@+id/tvNameCompose"
         android:text="TextView"
-        android:textColor="@color/light_grey"/>
+        android:textColor="@color/light_grey" />
 
 
     <TextView
@@ -55,26 +57,25 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:text="TextView"
-        android:textColor="@color/light_grey"/>
+        android:textColor="@color/light_grey" />
 
     <ImageButton
         android:id="@+id/ibReply"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignStart="@+id/tvBody"
-        android:layout_below="@+id/tvBody"
-        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="15dp"
+        android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/reply" />
+        app:srcCompat="@drawable/vector_compose_dm_shortcut"
+        android:layout_below="@+id/ivMedia"
+        android:layout_alignStart="@+id/tvBody"
+        android:layout_marginTop="5dp" />
 
     <ImageButton
         android:id="@+id/ibRetweet"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_below="@+id/ivMedia"
         android:layout_alignTop="@+id/ibReply"
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
@@ -84,47 +85,48 @@
         android:id="@+id/ivLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        app:srcCompat="@color/lighter_grey"
-        android:layout_marginTop="15dp"
+        android:layout_alignParentEnd="true"
         android:layout_below="@id/ibReply"
-        />
+        android:layout_marginTop="10dp"
+        app:srcCompat="@color/lighter_grey" />
 
     <ImageButton
         android:id="@+id/ibFavorite"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:srcCompat="@drawable/ic_vector_heart_stroke"
-        android:layout_below="@+id/ivProfileImage"
         android:layout_alignTop="@+id/ibRetweet"
+        android:layout_below="@+id/ivProfileImage"
         android:layout_toStartOf="@+id/tvNumFavorites"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_vector_heart_stroke" />
 
     <TextView
         android:id="@+id/tvNumFavorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:layout_alignBottom="@+id/ibFavorite"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="18dp" />
+        android:layout_marginEnd="18dp"
+        android:text="TextView" />
 
     <TextView
         android:id="@+id/tvNumRetweets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/ibRetweet"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ibRetweet"
-        android:layout_below="@+id/ivMedia"
-        android:layout_marginTop="10dp"
         android:text="TextView" />
 
     <ImageView
         android:id="@+id/ivMedia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/tvScreenName"
-        app:srcCompat="@color/black" />
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@color/inline_action_like"
+        android:layout_below="@+id/tvBody" />
+
 
 
 </RelativeLayout>

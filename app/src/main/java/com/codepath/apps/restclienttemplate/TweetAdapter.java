@@ -74,10 +74,16 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                 .bitmapTransform(new RoundedCornersTransformation(context, radius, margin))
                 .into(holder.ivProfileImage);
         if (currentTweet.mediaUrl!=null){
+            holder.ivMedia.getLayoutParams().height = currentTweet.mediaHeight;
+            holder.ivMedia.getLayoutParams().width = currentTweet.mediaWidth;
             Glide.with(context)
                     .load(currentTweet.mediaUrl)
                     .bitmapTransform(new RoundedCornersTransformation(context, radius, margin))
                     .into(holder.ivMedia);
+        }
+        else{
+            holder.ivMedia.getLayoutParams().height = 0;
+            holder.ivMedia.getLayoutParams().width = 0;
         }
         holder.tvScreenName.setText(String.format("@%s", currentTweet.user.screenName));
         String relativeTimeAgo=getRelativeTimeAgo(currentTweet.createdAt);
@@ -109,7 +115,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                                 holder.ibRetweet.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_retweet));
                                 holder.ibRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like));
                                 holder.tvNumRetweets.setText(String.valueOf(updatedTweet.numRetweets));
-
+                                //add reply to timeline. doesnt work on refresh tho cant find it in the api.
+//                                Tweet newRetweetedTweet = Tweet.fromJSON(response);
+//                                currentActivity.addNewTweet(newRetweetedTweet);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -170,7 +178,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                         }
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Log.e("favorite", errorResponse.toString());
+//                            Log.e("favorite", errorResponse.toString());
+                            super.onFailure(statusCode, headers, throwable , errorResponse );
                         }
                     });
                 }
