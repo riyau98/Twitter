@@ -116,7 +116,6 @@ public class ReplyTweetFragment extends DialogFragment {
     }
 
 
-
     // Define the events that the fragment will use to communicate
     public interface OnItemSelectedListener {
         // This can be any number of events to be sent to the activity
@@ -141,8 +140,5 @@ public class ReplyTweetFragment extends DialogFragment {
         super.onDetach();
         this.listener = null;
     }
-
-
-
 
 }

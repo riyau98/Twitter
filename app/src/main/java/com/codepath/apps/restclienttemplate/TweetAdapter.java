@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.fragments.HomeTimeLineFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -35,14 +36,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
     private List<Tweet> mTweets;
     Context context;
-    TimelineActivity currentActivity;
+    //TimelineActivity currentActivity;
     TwitterClient client;
-
+    HomeTimeLineFragment homeTimeLineFragment;
     //pass the tweets array into the constructor
 
-    public TweetAdapter(List<Tweet> tweets, TimelineActivity currentActivity){
+    public TweetAdapter(List<Tweet> tweets, Context currentActivity){
         mTweets = tweets;
-        this.currentActivity = currentActivity;
+        //this.currentActivity = (TimelineActivity) currentActivity;
         client = TwitterApp.getRestClient();
     }
 
@@ -55,6 +56,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         LayoutInflater inflater = LayoutInflater.from(context);
         View tweetView=inflater.inflate(R.layout.item_tweet, parent, false);
         ViewHolder viewHolder = new ViewHolder(tweetView);
+        homeTimeLineFragment = new HomeTimeLineFragment();
         return viewHolder;
     }
 
@@ -93,8 +95,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         holder.ibReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("fragment", "clicked to open fragment");
-                currentActivity.openFragment(currentTweet);
+                Log.i("fragment", currentTweet.toString());
+                homeTimeLineFragment.openFragment(currentTweet);
             }
         });
         if (currentTweet.favorited){
