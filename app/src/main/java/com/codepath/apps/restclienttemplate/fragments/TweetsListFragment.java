@@ -23,8 +23,11 @@ import java.util.ArrayList;
  * Created by ruppal on 7/3/17.
  */
 
-public class TweetsListFragment extends Fragment {
+public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener {
 
+    public interface TweetSelectedListener{
+        public void onTweetSelected (Tweet tweet);
+    }
     public TweetAdapter tweetAdapter;
     public ArrayList<Tweet> tweets;
     public RecyclerView rvTweets;
@@ -42,7 +45,7 @@ public class TweetsListFragment extends Fragment {
         //init the arraylist (data source)
         tweets = new ArrayList<>();
         //construct adapter from data source
-        tweetAdapter = new TweetAdapter(tweets, getContext());
+        tweetAdapter = new TweetAdapter(tweets, getContext(), this);
         //set up the recycler view (layout manager, use adapter)
         rvTweets.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTweets.setAdapter(tweetAdapter);
@@ -64,7 +67,15 @@ public class TweetsListFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-
+//        ItemClickSupport.addTo(rvTweets).setOnItemClickListener(
+//                new ItemClickSupport.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+//                        Tweet tweet = tweets.get(position);
+//                        Toast.makeText(getContext(), tweet.body, Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//        );
         return v;
     }
 
@@ -101,4 +112,11 @@ public class TweetsListFragment extends Fragment {
     public void populateList(){
 
     }
+
+    @Override
+    public void onItemSelected(View view, int position) {
+        Tweet tweet = tweets.get(position);
+        ((TweetSelectedListener)getActivity()).onTweetSelected(tweet);
+    }
+
 }

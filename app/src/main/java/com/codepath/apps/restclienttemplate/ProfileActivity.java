@@ -13,6 +13,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -25,30 +26,44 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        String screenName = getIntent().getStringExtra("screen_name");
-        //create user fragment
-        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
-        //display user fragment inside container dynamiclly
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flContainer, userTimelineFragment);
-        ft.commit();
+        final String screenName = getIntent().getStringExtra("screen_name");
+        User otherUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("other_user"));
         client=TwitterApp.getRestClient();
-        client.verifyCredentials(new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                User user = null;
-                try {
-                    user = User.fromJSON(response);
-                    getSupportActionBar().setTitle(user.getScreenName());
-                    //populate user headline
-                    populateUserHeadline(user);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        if (otherUser == null) {
+            client.verifyCredentials(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    User user = null;
+                    try {
+                        //create user fragment
+                        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
+                        //display user fragment inside container dynamiclly
 
-            }
-        });
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.replace(R.id.flContainer, userTimelineFragment);
+                        ft.commit();
+                        user = User.fromJSON(response);
+                        getSupportActionBar().setTitle(user.getScreenName());
+                        //populate user headline
+                        populateUserHeadline(user);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
+        else{
+            //create user fragment
+            UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
+            //display user fragment inside container dynamiclly
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flContainer, userTimelineFragment);
+            ft.commit();
+            populateUserHeadline(otherUser);
+        }
+
     }
 
     public void populateUserHeadline(User user){

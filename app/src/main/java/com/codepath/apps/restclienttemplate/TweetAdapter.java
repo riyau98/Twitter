@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -15,10 +16,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.fragments.HomeTimeLineFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,16 +38,24 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
     private List<Tweet> mTweets;
+    private TweetAdapterListener mListener;
     Context context;
     //TimelineActivity currentActivity;
     TwitterClient client;
     HomeTimeLineFragment homeTimeLineFragment;
     //pass the tweets array into the constructor
 
-    public TweetAdapter(List<Tweet> tweets, Context currentActivity){
+
+    //define an interface
+    public interface TweetAdapterListener{
+        public void onItemSelected(View view, int position);
+    }
+
+    public TweetAdapter(List<Tweet> tweets, Context currentActivity, TweetAdapterListener listener ){
         mTweets = tweets;
         //this.currentActivity = (TimelineActivity) currentActivity;
         client = TwitterApp.getRestClient();
+        mListener=listener;
     }
 
     //for each row, inflate layout and pass into viewholder class
@@ -69,18 +80,20 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         holder.tvUsername.setText(currentTweet.user.name);
         holder.tvBody.setText(currentTweet.body);
         //TODO-add a placeholder picture while image is loading
-        int radius = 8; // corner radius, higher value = more rounded
-        int margin = 3; // crop margin, set to 0 for corners with no crop
+        int image_radius = 15; // corner radius, higher value = more rounded
+        int image_margin = 3; // crop margin, set to 0 for corners with no crop
+        int profile_radius = 5; // corner radius, higher value = more rounded
+        int profile_margin = 0;
         Glide.with(context)
                 .load(currentTweet.user.profileImageUrl)
-                .bitmapTransform(new RoundedCornersTransformation(context, radius, margin))
+                .bitmapTransform(new RoundedCornersTransformation(context, profile_radius, profile_margin))
                 .into(holder.ivProfileImage);
         if (currentTweet.mediaUrl!=null){
             holder.ivMedia.getLayoutParams().height = currentTweet.mediaHeight;
             holder.ivMedia.getLayoutParams().width = currentTweet.mediaWidth;
             Glide.with(context)
                     .load(currentTweet.mediaUrl)
-                    .bitmapTransform(new RoundedCornersTransformation(context, radius, margin))
+                    .bitmapTransform(new RoundedCornersTransformation(context, image_radius, image_margin))
                     .into(holder.ivMedia);
         }
         else{
@@ -103,6 +116,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             holder.ibFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_heart));
             holder.ibFavorite.setColorFilter(ContextCompat.getColor(context,R.color.inline_action_like));
         }
+
 
         holder.ibRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,7 +260,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     }
 
     //create Viewholder class
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView ivProfileImage;
         public TextView tvBody;
         public TextView tvUsername;
@@ -273,17 +287,37 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             tvNumFavorites = (TextView) itemView.findViewById(R.id.tvNumFavorites);
             tvNumRetweets = (TextView) itemView.findViewById(R.id.tvNumRetweets);
             ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
-            //todo finish the details page
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //on click, go to deatils page
-//                    //create intent
-//                    //in intent, load the tweet
-//                    //start activity (not for result)
-//                }
-//            });
+            //handle on click events
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    Tweet tweet = mTweets.get(position);
+                    User user = tweet.getUser();
+                    Intent i = new Intent (context, ProfileActivity.class);
+                    i.putExtra("other_user", Parcels.wrap(user));
+                    i.putExtra("screen_name", user.getScreenName());
+                    context.startActivity(i);
+                }
+            });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        //get the position of the row element
+                        int position = getAdapterPosition();
+                        //fire listener is not null
+                        mListener.onItemSelected(v, position);
+                    }
+                }
+            });
+
+
         }
+
+
+
     }
 
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");

@@ -14,8 +14,12 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/twitter_blue_30</item>
+        <item name="colorPrimaryDark">@color/twitter_blue_50</item>
+        <item name="colorAccent">@color/inline_action_like</item>
+        <item name="android:colorForeground">@color/twitter_blue</item>
+        <item name="android:textColorSecondary">@color/twitter_blue_50</item>
     </style>
 
 </resources>

@@ -52,4 +52,47 @@ public class Tweet {
         return tweet;
     }
 
+    public String getBody() {
+        return body;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public boolean isRetweeted() {
+        return retweeted;
+    }
+
+    public Integer getNumFavorites() {
+        return numFavorites;
+    }
+
+    public Integer getNumRetweets() {
+        return numRetweets;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public Integer getMediaWidth() {
+        return mediaWidth;
+    }
+
+    public Integer getMediaHeight() {
+        return mediaHeight;
+    }
 }
