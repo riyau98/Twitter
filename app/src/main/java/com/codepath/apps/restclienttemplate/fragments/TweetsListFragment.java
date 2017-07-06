@@ -119,4 +119,10 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
         ((TweetSelectedListener)getActivity()).onTweetSelected(tweet);
     }
 
+
+    public void postTweet(Tweet newTweet){
+        tweets.add(0, newTweet);
+        tweetAdapter.notifyItemInserted(0);
+        rvTweets.scrollToPosition(0);
+    }
 }

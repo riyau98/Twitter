@@ -5,20 +5,24 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
+import org.parceler.Parcels;
+
+import static com.codepath.apps.restclienttemplate.fragments.HomeTimeLineFragment.NEW_TWEET_REQUEST_CODE;
+
 
 public class TimelineActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectedListener{
 
-
-
-
+    ViewPager vpPager;
 
     //steps to create a scrolling thing:
     //recycler view. Set up the recycler view including layout manager and use the adapter created in the itemview.
@@ -29,7 +33,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
       //get the view pager
-        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager = (ViewPager) findViewById(R.id.viewpager);
 
         //set the adapter
         vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), this));
@@ -58,6 +62,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
     @Override
     public void onTweetSelected(Tweet tweet) {
         Toast.makeText(this, tweet.body, Toast.LENGTH_LONG).show();
+        Log.i("tweet1", tweet.toString());
     }
 
 //    public void openFragment(Tweet tweet) {
@@ -66,19 +71,19 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
 //        replyTweetFragment.show(fm, "fragment_edit_name");
 //    }
 //
-//    public void composeNewTweet(MenuItem mi){
-//        Log.i("composeNewTweet", "here");
-//        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-//        startActivityForResult(i, NEW_TWEET_REQUEST_CODE);
-//    }
+    public void composeNewTweet(View v){
+        Log.i("composeNewTweet", "here");
+        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+        startActivityForResult(i, NEW_TWEET_REQUEST_CODE);
+    }
 //
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == NEW_TWEET_REQUEST_CODE && resultCode == RESULT_OK) {
-//            Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("newTweet"));
-//            addNewTweet(newTweet);
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NEW_TWEET_REQUEST_CODE && resultCode == RESULT_OK) {
+            Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("newTweet"));
+            ((TweetsPagerAdapter) vpPager.getAdapter()).mFragmentRefrences.get(0).postTweet(newTweet);
+        }
+    }
 //    @Override
 //    public void repliedToTweet(Tweet newTweet) {
 //        if (replyTweetFragment != null) {

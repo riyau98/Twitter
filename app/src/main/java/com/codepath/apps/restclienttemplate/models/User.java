@@ -24,8 +24,10 @@ public class User {
         User user=new User();
         //extract and fill out the values
         user.name=object.getString("name");
-        user.uid=object.getLong("id");
-        user.screenName=object.getString("screen_name");
+        long userId=object.getLong("id");
+        user.uid=userId;
+        String sName=object.getString("screen_name");
+        user.screenName=sName;
         user.profileImageUrl=object.getString("profile_image_url");
         user.tagLine = object.getString("description");
         user.followers = object.getInt("followers_count");
@@ -60,4 +62,7 @@ public class User {
     public String getProfileImageUrl() {
         return profileImageUrl;
     }
+
+
+
 }

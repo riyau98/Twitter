@@ -118,7 +118,13 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl=getApiUrl("statuses/unretweet/" + tweet.uid + ".json");
 		client.post(apiUrl, handler);
 	}
-
+	public void getProfileBanner(long userId, String sName, AsyncHttpResponseHandler handler){
+		String apiUrl=getApiUrl("users/profile_banner.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", userId);
+		params.put("screen_name", sName);
+		client.get(apiUrl, params, handler);
+	}
 
 
 

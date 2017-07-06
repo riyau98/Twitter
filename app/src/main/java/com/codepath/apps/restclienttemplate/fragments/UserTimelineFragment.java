@@ -70,19 +70,22 @@ public class UserTimelineFragment extends TweetsListFragment {
             }
         });
     }
+
     @Override
     public void populateList(){
-        client.getMentionsTimeline(new JsonHttpResponseHandler() {
+        populateTimeline();
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                addItems(response);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d("failed to refresh", throwable.toString());
-            }
-        });
+//        client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
+//
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                addItems(response);
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//                Log.d("failed to refresh", throwable.toString());
+//            }
+//        });
     }
 }
