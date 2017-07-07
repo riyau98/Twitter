@@ -40,7 +40,6 @@ public class HomeTimeLineFragment extends TweetsListFragment implements ReplyTwe
     }
 
 
-
     private void populateTimeline(){
         client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override

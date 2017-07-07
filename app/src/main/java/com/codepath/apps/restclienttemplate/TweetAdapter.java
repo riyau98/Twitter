@@ -116,7 +116,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             holder.ibFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_heart));
             holder.ibFavorite.setColorFilter(ContextCompat.getColor(context,R.color.inline_action_like));
         }
-
+        if (currentTweet.retweeted){
+            holder.ibRetweet.setColorFilter(ContextCompat.getColor(context,R.color.inline_action_like));
+        }
 
         holder.ibRetweet.setOnClickListener(new View.OnClickListener() {
             @Override

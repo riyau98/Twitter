@@ -33,7 +33,6 @@ public class ReplyTweetFragment extends DialogFragment {
     Tweet inResponseToTweet;
     EditText etReplyTweet;
     TwitterClient client;
-    Context context;
     // Define the listener of the interface type
     // listener will the activity instance containing fragment
     private OnItemSelectedListener listener;
@@ -57,8 +56,7 @@ public class ReplyTweetFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         inResponseToTweet = Parcels.unwrap(getArguments().getParcelable("responseToTweet"));
 //        Context context = Parcels.unwrap(getArguments().getParcelable("contextTimeline"));
-        context = getActivity();
-        client=new TwitterClient(context);
+        client=TwitterApp.getRestClient();
         Log.i("fragment", "in on create. in response to tweet" + inResponseToTweet.toString());
 
     }

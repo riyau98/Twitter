@@ -65,14 +65,14 @@
         android:id="@+id/ibReply"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_alignStart="@+id/tvBody"
+        android:layout_below="@+id/ivMedia"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/vector_compose_dm_shortcut"
-        android:layout_below="@+id/ivMedia"
-        android:layout_alignStart="@+id/tvBody"
-        android:layout_marginTop="5dp" />
+        app:srcCompat="@drawable/reply" />
 
     <ImageButton
         android:id="@+id/ibRetweet"
@@ -84,7 +84,7 @@
         app:srcCompat="@drawable/ic_vector_retweet_stroke" />
 
     <ImageView
-        android:id="@+id/ivLine"
+        android:id="@+id/ivLine2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentEnd="true"

@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
@@ -61,8 +60,9 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
 
     @Override
     public void onTweetSelected(Tweet tweet) {
-        Toast.makeText(this, tweet.body, Toast.LENGTH_LONG).show();
-        Log.i("tweet1", tweet.toString());
+        Intent i = new Intent(this, DetailActivity.class);
+        i.putExtra(DetailActivity.TWEET, Parcels.wrap(tweet));
+        startActivity(i);
     }
 
 //    public void openFragment(Tweet tweet) {
