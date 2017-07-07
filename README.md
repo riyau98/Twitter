@@ -49,8 +49,7 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
-
-<img src='http://g.recordit.co/49JgKVHEXu.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![Twitter Walkthrough](TwitterWeek2_Walkthrough.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
