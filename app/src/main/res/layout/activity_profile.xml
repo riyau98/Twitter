@@ -90,21 +90,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp" />
 
-    </LinearLayout>
 
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/flContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true">
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:srcCompat="@color/inline_action_disabled" />
+
     </FrameLayout>
 
 

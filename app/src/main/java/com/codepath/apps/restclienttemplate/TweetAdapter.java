@@ -19,6 +19,7 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
@@ -37,25 +38,28 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
+    private static final int REPLY_TO_TWEET_REQUEST_CODE = 100;
     private List<Tweet> mTweets;
     private TweetAdapterListener mListener;
     Context context;
     //TimelineActivity currentActivity;
     TwitterClient client;
     HomeTimeLineFragment homeTimeLineFragment;
+    ReplyListener replyListener;
     //pass the tweets array into the constructor
 
 
     //define an interface
-    public interface TweetAdapterListener{
+    public interface TweetAdapterListener extends  GenericListener{
         public void onItemSelected(View view, int position);
     }
 
-    public TweetAdapter(List<Tweet> tweets, Context currentActivity, TweetAdapterListener listener ){
+    public TweetAdapter(List<Tweet> tweets, Context currentActivity, GenericListener listener){
         mTweets = tweets;
         //this.currentActivity = (TimelineActivity) currentActivity;
         client = TwitterApp.getRestClient();
-        mListener=listener;
+        mListener= (TweetAdapterListener) listener;
+        replyListener = (ReplyListener) listener;
     }
 
     //for each row, inflate layout and pass into viewholder class
@@ -67,7 +71,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         LayoutInflater inflater = LayoutInflater.from(context);
         View tweetView=inflater.inflate(R.layout.item_tweet, parent, false);
         ViewHolder viewHolder = new ViewHolder(tweetView);
-        homeTimeLineFragment = new HomeTimeLineFragment();
         return viewHolder;
     }
 
@@ -109,7 +112,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 Log.i("fragment", currentTweet.toString());
-                homeTimeLineFragment.openFragment(currentTweet);
+                replyListener.openFragment(currentTweet);
             }
         });
         if (currentTweet.favorited){
@@ -130,7 +133,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                             try {
                                 Tweet updatedTweet = Tweet.fromJSON(response);
                                 mTweets.set(position, updatedTweet);
-                                holder.ibRetweet.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_retweet));
                                 holder.ibRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like));
                                 holder.tvNumRetweets.setText(String.valueOf(updatedTweet.numRetweets));
                                 //add reply to timeline. doesnt work on refresh tho cant find it in the api.
@@ -151,20 +153,25 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                     client.unRetweet(currentTweet, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            try {
-                                Tweet updatedTweet = Tweet.fromJSON(response);
-                                mTweets.set(position, updatedTweet);
-                                holder.ibRetweet.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_vector_retweet_stroke));
-                                holder.ibRetweet.setColorFilter(ContextCompat.getColor(context, R.color.black));
-                                holder.tvNumRetweets.setText(String.valueOf(updatedTweet.numRetweets));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            currentTweet.retweeted=false;
+                            currentTweet.numRetweets = currentTweet.numRetweets -1 ;
+                            holder.ibRetweet.setColorFilter(ContextCompat.getColor(context, R.color.black));
+                            holder.tvNumRetweets.setText(String.valueOf(currentTweet.getNumRetweets()));
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             Log.e("favorite", errorResponse.toString());
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
                         }
                     });
 
@@ -220,6 +227,16 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             Log.e("favorite", errorResponse.toString());
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
                         }
                     });
 
@@ -302,6 +319,17 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                     context.startActivity(i);
                 }
             });
+
+//            ibReply.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int position = getAdapterPosition();
+//                    Tweet tweet = mTweets.get(position);
+//                    Intent i = new Intent(context, ReplyActivity.class);
+//                    i.putExtra(ReplyActivity.RESPONSE_TO_TWEET, Parcels.wrap(tweet));
+//                    ((TimelineActivity) context).startActivityforResult(i, REPLY_TO_TWEET_REQUEST_CODE );
+//                }
+//            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

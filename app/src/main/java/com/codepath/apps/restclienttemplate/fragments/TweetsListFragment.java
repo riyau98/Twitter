@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.ReplyListener;
+import com.codepath.apps.restclienttemplate.ReplyTweetFragment;
 import com.codepath.apps.restclienttemplate.TweetAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
@@ -19,11 +22,24 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import static com.codepath.apps.restclienttemplate.fragments.HomeTimeLineFragment.NEW_TWEET_REQUEST_CODE;
+
 /**
  * Created by ruppal on 7/3/17.
  */
 
-public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener {
+public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener, ReplyListener, ReplyTweetFragment.OnItemSelectedListener {
+
+    @Override
+    public void openFragment(Tweet tweet) {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        ReplyTweetFragment replyTweetFragment = ReplyTweetFragment.newInstance(tweet, this);
+
+//        replyTweetFragment.show(fm, "fragment_edit_name");
+
+        replyTweetFragment.setTargetFragment(this, NEW_TWEET_REQUEST_CODE);
+        replyTweetFragment.show( getActivity().getSupportFragmentManager(), "reply");
+    }
 
     public interface TweetSelectedListener{
         public void onTweetSelected (Tweet tweet);
@@ -125,4 +141,17 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
         tweetAdapter.notifyItemInserted(0);
         rvTweets.scrollToPosition(0);
     }
+
+    @Override
+    public void repliedToTweet(Tweet newTweet) {
+        addNewTweet(newTweet);
+
+    }
+
+    public void addNewTweet(Tweet newTweet){
+        tweets.add(0, newTweet);
+        tweetAdapter.notifyItemInserted(0);
+        rvTweets.scrollToPosition(0);
+    }
+
 }

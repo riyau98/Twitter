@@ -90,7 +90,7 @@ public class HomeTimeLineFragment extends TweetsListFragment implements ReplyTwe
 
     public void openFragment(Tweet tweet) {
 //        FragmentManager fm = getActivity().getSupportFragmentManager();
-        replyTweetFragment = ReplyTweetFragment.newInstance(tweet);
+        replyTweetFragment = ReplyTweetFragment.newInstance(tweet, this);
 
 //        replyTweetFragment.show(fm, "fragment_edit_name");
 
@@ -112,18 +112,7 @@ public class HomeTimeLineFragment extends TweetsListFragment implements ReplyTwe
         }
     }
 
-    @Override
-    public void repliedToTweet(Tweet newTweet) {
-        if (replyTweetFragment != null) {
-            addNewTweet(newTweet);
-        }
-    }
 
-    public void addNewTweet(Tweet newTweet){
-        tweets.add(0, newTweet);
-        tweetAdapter.notifyItemInserted(0);
-        rvTweets.scrollToPosition(0);
-    }
 
 
 

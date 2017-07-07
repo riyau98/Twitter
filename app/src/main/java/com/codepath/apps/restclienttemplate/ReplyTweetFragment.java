@@ -1,6 +1,5 @@
 package com.codepath.apps.restclienttemplate;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -38,12 +38,13 @@ public class ReplyTweetFragment extends DialogFragment {
     private OnItemSelectedListener listener;
 
 
-    public ReplyTweetFragment() {
+    public ReplyTweetFragment(TweetsListFragment tweetsListFragment) {
         // Required empty public constructor
+        listener = tweetsListFragment;
     }
 
-    public static ReplyTweetFragment newInstance(Tweet tweet) {
-        ReplyTweetFragment fragment = new ReplyTweetFragment();
+    public static ReplyTweetFragment newInstance(Tweet tweet, TweetsListFragment tweetsListFragment) {
+        ReplyTweetFragment fragment = new ReplyTweetFragment(tweetsListFragment);
         Bundle args = new Bundle();
         args.putParcelable("responseToTweet", Parcels.wrap(tweet));
 //        args.putParcelable("contextTimeline", Parcels.wrap(context));
@@ -121,16 +122,16 @@ public class ReplyTweetFragment extends DialogFragment {
     }
 
     // Store the listener (activity) that will have events fired once the fragment is attached
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnItemSelectedListener) {
-            listener = (OnItemSelectedListener) context;
-        } else {
-            throw new ClassCastException(context.toString()
-                    + " must implement MyListFragment.OnItemSelectedListener");
-        }
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnItemSelectedListener) {
+//            listener = (OnItemSelectedListener) context;
+//        } else {
+//            throw new ClassCastException(context.toString()
+//                    + " must implement MyListFragment.OnItemSelectedListener");
+//        }
+//    }
     // This method is called when the fragment is no longer connected to the Activity
     // Any references saved in onAttach should be nulled out here to prevent memory leaks.
     @Override
